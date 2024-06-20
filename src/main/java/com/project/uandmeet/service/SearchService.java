@@ -2,10 +2,7 @@ package com.project.uandmeet.service;
 
 import com.project.uandmeet.dto.SearchResponseDto;
 import com.project.uandmeet.model.Board;
-import com.project.uandmeet.model.QBoard;
 import com.project.uandmeet.repository.BoardRepository;
-import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -35,19 +31,7 @@ public class SearchService {
 
             Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
 
-            QBoard qBoard = QBoard.board;
-
-            BooleanBuilder builder = new BooleanBuilder();
-
-            BooleanExpression exTitle = qBoard.title.contains(keyword);
-
-            BooleanExpression exType = qBoard.boardType.contains(boardType);
-
-            builder.and(exTitle);
-
-            builder.and(exType);
-
-            Page<Board> result = boardRepository.findAll(builder, pageable);
+            Page<Board> result = boardRepository.searchByBoardTypeAndTitleContaining(boardType, keyword, pageable);
 
             List<SearchResponseDto> boardList = new ArrayList<>();
 
@@ -78,19 +62,7 @@ public class SearchService {
 
             Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
 
-            QBoard qBoard = QBoard.board;
-
-            BooleanBuilder builder = new BooleanBuilder();
-
-            BooleanExpression exContent = qBoard.content.contains(keyword);
-
-            BooleanExpression exType = qBoard.boardType.contains(boardType);
-
-            builder.and(exContent);
-
-            builder.and(exType);
-
-            Page<Board> result = boardRepository.findAll(builder, pageable);
+            Page<Board> result = boardRepository.searchByBoardTypeAndContentContaining(boardType, keyword, pageable);
 
             List<SearchResponseDto> boardList = new ArrayList<>();
 
@@ -123,23 +95,7 @@ public class SearchService {
 
             Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
 
-            QBoard qBoard = QBoard.board;
-
-            BooleanBuilder builder = new BooleanBuilder();
-
-            BooleanExpression exTitle = qBoard.title.contains(keyword);
-
-            BooleanExpression exContent = qBoard.content.contains(keyword);
-
-            BooleanExpression exType = qBoard.boardType.contains(boardType);
-
-            BooleanExpression exAll = exTitle.or(exContent);
-
-            builder.and(exAll);
-
-            builder.and(exType);
-
-            Page<Board> result = boardRepository.findAll(builder, pageable);
+            Page<Board> result = boardRepository.searchByBoardTypeAndTitleContainingOrContentContaining(boardType, keyword, pageable);
 
             List<SearchResponseDto> boardList = new ArrayList<>();
 

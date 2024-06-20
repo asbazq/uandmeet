@@ -5,7 +5,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -30,6 +32,13 @@ public  interface BoardRepository extends JpaRepository<Board, Long>, QuerydslPr
     List<Board> findByBoardTypeAndCategoryOrderByLikeCountDesc(String boardtype, Category category);
     Optional<Board> findByBoardTypeAndId(String boardType, Long boardId);
 
+    @Query("SELECT p FROM Board p WHERE p.boardType = :boardType AND p.title LIKE %:title%")
+    Page<Board> searchByBoardTypeAndTitleContaining(@Param("boardType") String boardType, @Param("query") String query, Pageable pageable);
 
+    @Query("SELECT p FROM Board p WHERE p.boardType = :boardType AND p.content LIKE %:query%")
+    Page<Board> searchByBoardTypeAndContentContaining(@Param("boardType") String boardType, @Param("query") String query, Pageable pageable);
 
+    @Query("SELECT p FROM Board p WHERE p.boardType = :boardType AND p.title LIKE %:query% OR p.content LIKE %:query%")
+    Page<Board> searchByBoardTypeAndTitleContainingOrContentContaining(@Param("boardType") String boardType, @Param("query") String query, Pageable pageable);
+    
 }
