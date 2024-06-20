@@ -1,7 +1,7 @@
 package com.project.uandmeet.chat.service;
 
-import com.project.uandmeet.exception.CustomException;
-import com.project.uandmeet.exception.ErrorCode;
+import com.project.uandmeet.Exception.CustomException;
+import com.project.uandmeet.Exception.ErrorCode;
 import com.project.uandmeet.model.Board;
 import com.project.uandmeet.model.Member;
 import com.project.uandmeet.repository.BoardRepository;

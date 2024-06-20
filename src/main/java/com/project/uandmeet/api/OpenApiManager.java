@@ -2,8 +2,8 @@ package com.project.uandmeet.api;
 
 import com.project.uandmeet.dto.ApiDtoGroup.GuareaDto;
 import com.project.uandmeet.dto.ApiDtoGroup.SiareaDto;
-import com.project.uandmeet.exception.CustomException;
-import com.project.uandmeet.exception.ErrorCode;
+import com.project.uandmeet.Exception.CustomException;
+import com.project.uandmeet.Exception.ErrorCode;
 import com.project.uandmeet.model.Guarea;
 import com.project.uandmeet.model.Siarea;
 import com.project.uandmeet.repository.GuareaRepostiory;

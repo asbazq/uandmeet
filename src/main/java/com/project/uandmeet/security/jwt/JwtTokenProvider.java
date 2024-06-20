@@ -6,8 +6,8 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.uandmeet.exception.CustomException;
-import com.project.uandmeet.exception.ErrorCode;
+import com.project.uandmeet.Exception.CustomException;
+import com.project.uandmeet.Exception.ErrorCode;
 import com.project.uandmeet.security.UserDetailsImpl;
 import io.jsonwebtoken.*;
 

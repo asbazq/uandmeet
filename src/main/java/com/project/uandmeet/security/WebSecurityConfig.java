@@ -1,6 +1,6 @@
 package com.project.uandmeet.security;
 
-import com.project.uandmeet.exception.JwtTokenExceptionFilter;
+import com.project.uandmeet.Exception.JwtTokenExceptionFilter;
 import com.project.uandmeet.oauth.CustomOAuth2UserService;
 import com.project.uandmeet.oauth.OAuth2SuccessHandler;
 import com.project.uandmeet.redis.RedisUtil;

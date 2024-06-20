@@ -2,7 +2,7 @@ package com.project.uandmeet.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.project.uandmeet.dto.*;
-import com.project.uandmeet.exception.CustomException;
+import com.project.uandmeet.Exception.CustomException;
 import com.project.uandmeet.model.Review;
 import com.project.uandmeet.security.UserDetailsImpl;
 import com.project.uandmeet.service.EmailService;

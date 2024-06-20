@@ -1,4 +1,4 @@
-package com.project.uandmeet.exception;
+package com.project.uandmeet.Exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,5 +7,5 @@ import lombok.Getter;
 @AllArgsConstructor
 
 public class CustomException extends RuntimeException{
-    private final com.project.uandmeet.exception.ErrorCode errorCode;
+    private final com.project.uandmeet.Exception.ErrorCode errorCode;
 }

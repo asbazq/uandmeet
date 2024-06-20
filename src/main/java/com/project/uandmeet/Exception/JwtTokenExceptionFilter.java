@@ -1,4 +1,4 @@
-package com.project.uandmeet.exception;
+package com.project.uandmeet.Exception;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.uandmeet.security.jwt.JwtProperties;

@@ -2,8 +2,8 @@ package com.project.uandmeet.chat.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.uandmeet.chat.model.ChatMessage;
-import com.project.uandmeet.exception.CustomException;
-import com.project.uandmeet.exception.ErrorCode;
+import com.project.uandmeet.Exception.CustomException;
+import com.project.uandmeet.Exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;

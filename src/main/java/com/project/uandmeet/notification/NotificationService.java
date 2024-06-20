@@ -1,8 +1,8 @@
 package com.project.uandmeet.notification;
 
 import com.project.uandmeet.chat.service.CommonUtil;
-import com.project.uandmeet.exception.CustomException;
-import com.project.uandmeet.exception.ErrorCode;
+import com.project.uandmeet.Exception.CustomException;
+import com.project.uandmeet.Exception.ErrorCode;
 import com.project.uandmeet.model.Member;
 import com.project.uandmeet.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
