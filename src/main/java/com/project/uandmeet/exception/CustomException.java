@@ -7,5 +7,5 @@ import lombok.Getter;
 @AllArgsConstructor
 
 public class CustomException extends RuntimeException{
-    private final com.project.uandmeet.Exception.ErrorCode errorCode;
+    private final ErrorCode errorCode;
 }
