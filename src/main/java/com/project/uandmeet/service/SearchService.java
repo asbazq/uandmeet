@@ -21,10 +21,7 @@ public class SearchService {
 
     public List<SearchResponseDto> queryDslSearch(String boardType,int page, int size, String sort, String keyword, String city, String gu) {
 
-        if (page > 0)
-            page = page - 1;
-        else if (page <= 0)
-            page = 0;
+        page = Math.max(page - 1, 0);
 
         // 제목만 검색
         if(sort.equals("title")){
