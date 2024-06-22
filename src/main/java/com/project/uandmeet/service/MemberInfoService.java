@@ -11,6 +11,8 @@ import com.project.uandmeet.repository.MemberRepository;
 import com.project.uandmeet.repository.ReviewRepository;
 import com.project.uandmeet.security.UserDetailsImpl;
 import com.project.uandmeet.service.S3.S3Uploader;
+import com.project.uandmeet.service.local.LocalUploader;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +28,7 @@ public class MemberInfoService {
     private final EntryRepository entryRepository;
     private final ReviewRepository reviewRepository;
     private final S3Uploader s3Uploader;
+    private final LocalUploader localUploader;
     private final String POST_IMAGE_DIR = "static";
 
     // 활동 내역 조회
@@ -210,7 +213,8 @@ public class MemberInfoService {
             star = sum / review.size(); // 평균 별점
         }
         if (requestDto.getData() != null) {
-            ImageDto uploadImage = s3Uploader.upload(requestDto.getData(), POST_IMAGE_DIR);
+            // ImageDto uploadImage = s3Uploader.upload(requestDto.getData(), POST_IMAGE_DIR);
+            ImageDto uploadImage = localUploader.upload(requestDto.getData(), POST_IMAGE_DIR);
             member.setProfile(uploadImage.getImageUrl());
             memberRepository.save(member);
             ProfileDto profileDto = new ProfileDto(nickname, star, uploadImage.getImageUrl());
