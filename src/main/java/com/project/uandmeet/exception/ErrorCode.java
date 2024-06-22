@@ -36,7 +36,7 @@ public enum ErrorCode {
     /*유저의 이름을 4자이상으로 만들어주세요 */
     DUPLICATE_NICKNAME(HttpStatus.CONFLICT, "중복된 닉네임이 존재합니다"),
     DUPLICATE_APPLY(HttpStatus.CONFLICT, "이미 참여한 매칭입니다."),
-
+    DUPLICATE_LIKE(HttpStatus.CONFLICT, "이미 누른 좋아요입니다"),
     DUPLICATE_REVIEW(HttpStatus.CONFLICT, "이미 참여한 리뷰입니다."),
 
 

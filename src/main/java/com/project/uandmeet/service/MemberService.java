@@ -1,9 +1,6 @@
 package com.project.uandmeet.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.uandmeet.dto.*;
-import com.project.uandmeet.dto.boardDtoGroup.LikeDto;
 import com.project.uandmeet.Exception.CustomException;
 import com.project.uandmeet.Exception.ErrorCode;
 import com.project.uandmeet.model.*;
@@ -12,14 +9,8 @@ import com.project.uandmeet.repository.*;
 import com.project.uandmeet.security.UserDetailsImpl;
 import com.project.uandmeet.security.jwt.JwtProperties;
 import com.project.uandmeet.security.jwt.JwtTokenProvider;
-import com.project.uandmeet.service.S3.S3Uploader;
-import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -29,10 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Transactional

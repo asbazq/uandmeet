@@ -6,8 +6,8 @@ import com.project.uandmeet.Exception.CustomException;
 import com.project.uandmeet.Exception.ErrorCode;
 import com.project.uandmeet.model.Guarea;
 import com.project.uandmeet.model.Siarea;
-import com.project.uandmeet.repository.GuareaRepostiory;
-import com.project.uandmeet.repository.SiareaRepostiory;
+import com.project.uandmeet.repository.GuareaRepository;
+import com.project.uandmeet.repository.SiareaRepository;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -23,8 +23,8 @@ import java.util.List;
 //Component : 개발자가직접 작성한 class를 bean으로 등록하기 위한 annotation.
 public class OpenApiManager {
 
-    private final SiareaRepostiory siareaRepostiory;
-    private final GuareaRepostiory guareaRepostiory;
+    private final SiareaRepository siareaRepostiory;
+    private final GuareaRepository guareaRepostiory;
     private final String BASE_URL = "http://api.vworld.kr/req/data";
     private final String serviceKey = "?key=908D840D-CAAF-3C01-9A6D-307EE8D34A6E";
     private final String defaultDomain = "&domain=http://localhost:8080/";
@@ -43,7 +43,7 @@ public class OpenApiManager {
     private final String sidata = "&data=LT_C_ADSIDO_INFO"; //조회할 데이터 서비스 ID값.
     private final String gudata = "&data=LT_C_ADSIGG_INFO"; //조회할 데이터 서비스 ID값.
 
-    public OpenApiManager(SiareaRepostiory siareaRepostiory, GuareaRepostiory guareaRepostiory) {
+    public OpenApiManager(SiareaRepository siareaRepostiory, GuareaRepository guareaRepostiory) {
         this.siareaRepostiory = siareaRepostiory;
         this.guareaRepostiory = guareaRepostiory;
     }
