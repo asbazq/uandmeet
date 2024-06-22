@@ -35,7 +35,7 @@ public class BoardController {
     private ResponseEntity<Long> boardNew(@ModelAttribute BoardRequestDto.createAndCheck boardRequestDto,
                                           @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
         System.out.println(userDetails.getMember().getUsername());
-        return boardService.boardNew(boardRequestDto, userDetails);
+        return ResponseEntity.ok(boardService.boardNew(boardRequestDto, userDetails));
     }
 
     //매칭 게시물 전체 조회 (카테고리별 전체 조회)
@@ -57,13 +57,13 @@ public class BoardController {
 
     //매칭 게시물 상세 조회
     @GetMapping("/api/boards/matching/{id}")
-    private BoardResponseDto boardChoiceInquiry(@PathVariable("id") Long id) {
+    private ResponseEntity<BoardResponseDto> boardChoiceInquiry(@PathVariable("id") Long id) {
         BoardResponseDto boardChoiceInquiry = null;
         boardChoiceInquiry = boardService.boardChoiceInquiry(id);
         if (boardChoiceInquiry == null) {
             throw new CustomException(ErrorCode.CAN_NOT_CREATE_ROOM);
         } else
-            return boardChoiceInquiry;
+            return ResponseEntity.ok(boardChoiceInquiry);
     }
 
 /*    //매칭 게시물 상세 조회 (로그인 후 )
@@ -103,27 +103,14 @@ public class BoardController {
 
     //공유 게시물 상세 조회
     @GetMapping("/api/boards/information/{id}")
-    private BoardResponseDto boardChoiceInfoInquiry(@PathVariable("id") Long id) {
+    private ResponseEntity<BoardResponseDto> boardChoiceInfoInquiry(@PathVariable("id") Long id) {
         BoardResponseDto boardChoiceInfoInquiry = null;
         boardChoiceInfoInquiry = boardService.boardChoiceInfoInquiry(id);
         if (boardChoiceInfoInquiry == null) {
             throw new CustomException(ErrorCode.CAN_NOT_CREATE_ROOM);
         } else
-            return boardChoiceInfoInquiry;
+            return ResponseEntity.ok(boardChoiceInfoInquiry);
     }
-
-/*    //공유 게시물 상세 조회(로그인 후)
-    @GetMapping("/api/boards/information/login/{id}")
-    private BoardResponseDto boardChoiceInfoLoginInquiry(@PathVariable("id") Long id,
-                                                         @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        BoardResponseDto boardChoiceInfoLoginInquiry = null;
-        boardChoiceInfoLoginInquiry = boardService.boardChoiceInfoLoginInquiry(id,userDetails);
-        if (boardChoiceInfoLoginInquiry == null) {
-            throw new CustomException(ErrorCode.CAN_NOT_CREATE_ROOM);
-        } else
-            return boardChoiceInfoLoginInquiry;
-    }*/
-
 
     //공유 개시물 수정
     @PutMapping("/api/board/information/{id}")
@@ -145,13 +132,13 @@ public class BoardController {
     @PostMapping("/board/likes")
     private ResponseEntity<LikeDto.response> likeClick(@RequestBody LikeDto.request likeDto,
                                                        @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return boardService.likeClick(likeDto, userDetails);
+        return ResponseEntity.ok(boardService.likeClick(likeDto, userDetails));
     }
 
     @PostMapping("/board/statecheck/{id}")
     private ResponseEntity<StateCheckDto> stateCheck(@PathVariable("id") Long id,
                                                      @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return boardService.stateCheck(id,userDetails);
+        return ResponseEntity.ok(boardService.stateCheck(id,userDetails));
     }
 
 
@@ -160,7 +147,7 @@ public class BoardController {
     @PostMapping("/board/matchingentry")
     private ResponseEntity<EntryDto.response> matchingJoin(@RequestBody EntryDto.request entryDto,
                                                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return boardService.matchingJoin(entryDto, userDetails);
+        return ResponseEntity.ok(boardService.matchingJoin(entryDto, userDetails));
     }
 
     //댓글작성
@@ -168,37 +155,31 @@ public class BoardController {
     private ResponseEntity<CommentsInquiryDto> commentsNew(@PathVariable("id") Long id,
                                                            @RequestBody CommentsRequestDto commentsRequestDto,
                                                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return boardService.commentsNew(id,commentsRequestDto,userDetails);
+        return ResponseEntity.ok(boardService.commentsNew(id,commentsRequestDto,userDetails));
     }
 
     //댓글 전체 조회
     @GetMapping("/api/board/{id}/comments")
-    private List<CommentsInquiryDto> commentInquiry(@PathVariable("id") Long id) {
-        return boardService.commentInquiry(id);
+    private ResponseEntity<List<CommentsInquiryDto>> commentInquiry(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(boardService.commentInquiry(id));
     }
 
     //댓글 삭제
     @DeleteMapping("/api/board/{boardId}/comments/{commentId}")
     private CustomException commentDel(@PathVariable("boardId") Long boardId,
                                        @PathVariable("commentId") Long commentId,
-                                       @AuthenticationPrincipal UserDetailsImpl userDetails)
-    {
+                                       @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return boardService.commentDel(boardId,commentId, userDetails);
-
     }
 
     @GetMapping("/board/search")
-    public List<SearchResponseDto> search(@RequestParam(value = "page") int page,
+    public ResponseEntity<List<SearchResponseDto>> search(@RequestParam(value = "page") int page,
                                           @RequestParam(value = "boardType") String boardType,
                                           @RequestParam(value = "amount") int size,
                                           @RequestParam(value = "sort") String sort,
                                           @RequestParam(value = "keyword") String keyword,
                                           @RequestParam(value = "city") String city,
                                           @RequestParam(value = "gu") String gu) {
-
-        List<SearchResponseDto> searchResponseDto = searchService.queryDslSearch(boardType,page, size, sort, keyword, city, gu);
-
-        return searchResponseDto;
-
+        return ResponseEntity.ok(searchService.queryDslSearch(boardType,page, size, sort, keyword, city, gu));
     }
 }
