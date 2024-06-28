@@ -1,7 +1,6 @@
 package com.project.uandmeet.dto.boardDtoGroup;
 
 import lombok.*;
-import org.springframework.web.multipart.MultipartFile;
 
 
 public class BoardRequestDto {
@@ -22,8 +21,6 @@ public class BoardRequestDto {
         private String city;
         private String gu;
         private Long maxEntry;
-        private MultipartFile data;
-
 
         //경도
         private String lat;

@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -33,9 +34,10 @@ public class BoardController {
     //게시물 작성
     @PostMapping("/api/board/create")
     private ResponseEntity<Long> boardNew(@ModelAttribute BoardRequestDto.createAndCheck boardRequestDto,
-                                          @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
+                                          @AuthenticationPrincipal UserDetailsImpl userDetails,
+                                           @RequestParam(value = "data", required = false) MultipartFile data) throws IOException {
         System.out.println(userDetails.getMember().getUsername());
-        return ResponseEntity.ok(boardService.boardNew(boardRequestDto, userDetails));
+        return ResponseEntity.ok(boardService.boardNew(boardRequestDto, userDetails, data));
     }
 
     //매칭 게시물 전체 조회 (카테고리별 전체 조회)
@@ -65,18 +67,6 @@ public class BoardController {
         } else
             return ResponseEntity.ok(boardChoiceInquiry);
     }
-
-/*    //매칭 게시물 상세 조회 (로그인 후 )
-    @GetMapping("/api/boards/matching/login/{id}")
-    private BoardResponseDto boardChoiceLoginInquiry(@PathVariable("id") Long id,
-                                                     @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        BoardResponseDto boardChoiceLoginInquiry = null;
-        boardChoiceLoginInquiry = boardService.boardChoiceLoginInquiry(id,userDetails);
-        if (boardChoiceLoginInquiry == null) {
-            throw new CustomException(ErrorCode.CAN_NOT_CREATE_ROOM);
-        } else
-            return boardChoiceLoginInquiry;
-    }*/
 
     //매칭 개시물 수정
     @PutMapping("/api/board/matching/{id}")
