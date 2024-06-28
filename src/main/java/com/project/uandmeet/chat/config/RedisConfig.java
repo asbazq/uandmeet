@@ -40,24 +40,25 @@ public class RedisConfig {
     }
 
     //알림 (sse)
-    @Bean
-    public ChannelTopic sseTopic() {
-        return new ChannelTopic("sse");
-    }
+    // @Bean
+    // public ChannelTopic sseTopic() {
+    //     return new ChannelTopic("sse");
+    // }
 
     //     redis에 발행(publish)된 메시지 처리를 위한 리스너 설정
     @Bean
     public RedisMessageListenerContainer redisMessageListener(RedisConnectionFactory connectionFactory,
                                                               MessageListenerAdapter listenerAdapter,
-                                                              MessageListenerAdapter sseListenerAdapter,
-                                                              ChannelTopic channelTopic,
-                                                              ChannelTopic sseTopic) {
+                                                            //   MessageListenerAdapter sseListenerAdapter,
+                                                              ChannelTopic channelTopic
+                                                            //   ChannelTopic sseTopic
+                                                              ) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
         //채팅 리스너
         container.addMessageListener(listenerAdapter, channelTopic);
         //알림 리스너 (sse)
-        container.addMessageListener(sseListenerAdapter, sseTopic);
+        // container.addMessageListener(sseListenerAdapter, sseTopic);
         return container;
     }
 
@@ -69,9 +70,9 @@ public class RedisConfig {
         return new MessageListenerAdapter(subscriber, "sendMessage");
     }
 
-    @Bean
-    public MessageListenerAdapter sseListenerAdapter(SseRedisSubscriber subscriber) {
-        return new MessageListenerAdapter(subscriber, "sendMessage");
-    }
+    // @Bean
+    // public MessageListenerAdapter sseListenerAdapter(SseRedisSubscriber subscriber) {
+    //     return new MessageListenerAdapter(subscriber, "sendMessage");
+    // }
 }
 

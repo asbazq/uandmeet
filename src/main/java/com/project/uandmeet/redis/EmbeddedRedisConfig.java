@@ -3,6 +3,7 @@ package com.project.uandmeet.redis;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+
 import redis.embedded.RedisServer;
 
 import javax.annotation.PostConstruct;
@@ -14,7 +15,6 @@ import javax.annotation.PreDestroy;
  * <p>로컬에서 테스트 하려면 프로필을 수정하면 된다</p>
  */
 @Profile("local")
-// @Profile("${spring.redis.host}")
 @Configuration
 public class EmbeddedRedisConfig {
 
@@ -44,4 +44,3 @@ public class EmbeddedRedisConfig {
         }
     }
 }
-

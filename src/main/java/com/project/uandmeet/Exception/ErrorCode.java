@@ -55,7 +55,12 @@ public enum ErrorCode {
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버에서 요청사항을 수행할 수 없습니다."),
 
     //Entry 관련
-    ACCEPTED_SEAM(HttpStatus.ACCEPTED, "중복입니다");
+    ACCEPTED_SEAM(HttpStatus.ACCEPTED, "중복입니다"),
+
+    //redis 관련
+    NOT_FOUND_REDIS_PORT(HttpStatus.SERVICE_UNAVAILABLE, "사용 가능한 레디스 포트를 찾을 수 없습니다."),
+    ERROR_EMBEDDEDREDIS(HttpStatus.INTERNAL_SERVER_ERROR, "레디스 에러가 발생했습니다.");
+
     private final HttpStatus httpStatus;
     private final String errorMessage;
 
