@@ -29,6 +29,9 @@ public class LocalUploader {
     @Value("${local.upload.dir}")
     private String localUploadDir; // 로컬 업로드 디렉토리 경로
 
+    @Value("${local.image.path}")
+    private String imageUri;
+
     public ImageDto upload(MultipartFile multipartFile, String dirName) throws IOException {
         File uploadFile = convert(multipartFile)
                 .orElseThrow(() -> new IllegalArgumentException("error: MultipartFile -> File convert fail"));
@@ -49,12 +52,13 @@ public class LocalUploader {
 
     // 로컬 파일 업로드
     private ImageDto upload(File uploadFile, String dirName) throws IOException {
-        String fileName = dirName + "/" + UUID.randomUUID() + uploadFile.getName();
-        Path filePath = Paths.get(localUploadDir, fileName);
+        String fileName = UUID.randomUUID() + uploadFile.getName();
+        Path filePath = Paths.get(localUploadDir + "/" + dirName, fileName);
         Files.createDirectories(filePath.getParent()); // 디렉토리 생성
         Files.copy(uploadFile.toPath(), filePath);
         removeNewFile(uploadFile);
-        return new ImageDto(filePath.toString(), fileName);
+        return new ImageDto(imageUri + "/" + fileName, fileName);
+        // return new ImageDto(localUploadDir  + fileName, fileName);
     }
 
     // 로컬에 저장된 임시 파일 삭제
