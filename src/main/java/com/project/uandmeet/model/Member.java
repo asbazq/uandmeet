@@ -24,7 +24,7 @@ public class Member {
     @Column(nullable = true, unique = true)
     private String nickname;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private String password;
 
     @Column
@@ -79,11 +79,13 @@ public class Member {
 
     // kakaoUser
     @Builder
-    public Member(String username, String loginto, MemberRoleEnum role, String nickname) {
+    public Member(String username, String password, String loginto, MemberRoleEnum role, String nickname, String profile) {
         this.username = username;
+        this.password = password;
         this.loginto = loginto;
         this.role = role;
         this.nickname = nickname;
+        this.profile = profile;
     }
 
 

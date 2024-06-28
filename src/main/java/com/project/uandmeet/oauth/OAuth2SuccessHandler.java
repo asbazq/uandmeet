@@ -36,36 +36,41 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         // OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) authentication;
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal(); // 구글 이메일
 
+        String registrationId = userDetails.getMember().getLoginto();
+
         String nickname = userDetails.getMember().getNickname();
 
         String username = userDetails.getUsername();
 
-        // String profile = userDetails.getMember().getProfile();
+        String profile = userDetails.getMember().getProfile();
 
         String accessToken = jwtTokenProvider.createToken(userDetails.getUsername(), userDetails.getMember().getId());
 
         String refreshToken = jwtTokenProvider.createRefreshToken(userDetails.getUsername());
 
         // redis 에 token 저장
-        // redisUtil.setDataExpire(userDetails.getUsername()+JwtProperties.HEADER_ACCESS, JwtProperties.TOKEN_PREFIX + accessToken, JwtProperties.ACCESS_EXPIRATION_TIME);
-        // redisUtil.setDataExpire(userDetails.getUsername()+JwtProperties.HEADER_REFRESH, JwtProperties.TOKEN_PREFIX + refreshToken, JwtProperties.REFRESH_EXPIRATION_TIME);
+        redisUtil.setDataExpire(userDetails.getUsername()+JwtProperties.HEADER_ACCESS, JwtProperties.TOKEN_PREFIX + accessToken, JwtProperties.ACCESS_EXPIRATION_TIME);
+        redisUtil.setDataExpire(userDetails.getUsername()+JwtProperties.HEADER_REFRESH, JwtProperties.TOKEN_PREFIX + refreshToken, JwtProperties.REFRESH_EXPIRATION_TIME);
 
 
-        String url = makeRedirectUrl(accessToken, username , nickname);
+        String url = makeRedirectUrl(accessToken, refreshToken, username , nickname, profile, registrationId);
 
         log.info("조합된 URL: "+url);
 
         getRedirectStrategy().sendRedirect(request, response, url);
     }
 
-    private String makeRedirectUrl(String access_Token,String username,String nickname) throws UnsupportedEncodingException {
-        String encodednickname = URLEncoder.encode(nickname,"utf-8");
-        return UriComponentsBuilder.fromUriString("http://localhost:8080/oauth2/redirect")
+    private String makeRedirectUrl(String access_Token, String refresh_Token, String username,String nickname, String profile, String registrationId) throws UnsupportedEncodingException {
+        String encodedNickname = URLEncoder.encode(nickname, "UTF-8");
+        String encodedRegistrationId = URLEncoder.encode(registrationId, "UTF-8");
+        String encodedUsername = URLEncoder.encode(username, "UTF-8");
+        return UriComponentsBuilder.fromUriString("http://localhost:3000/oauth2/authoriztion/" + registrationId)
                 .queryParam("access_Token", access_Token)
-//                .queryParam("refresh_Token", refresh_Token)
-                .queryParam("username", username)
-                .queryParam("nickname", encodednickname)
-                // .queryParam("profile", profile)
+               .queryParam("refresh_Token", refresh_Token)
+                .queryParam("username", encodedUsername)
+                .queryParam("nickname", encodedNickname)
+                .queryParam("profile", profile)
+                .queryParam("registrationId", encodedRegistrationId)
                 .build().toUriString();
 
     }

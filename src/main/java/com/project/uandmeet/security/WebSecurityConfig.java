@@ -1,6 +1,5 @@
 package com.project.uandmeet.security;
 
-import com.project.uandmeet.Exception.JwtTokenExceptionFilter;
 import com.project.uandmeet.oauth.CustomOAuth2UserService;
 import com.project.uandmeet.oauth.OAuth2SuccessHandler;
 import com.project.uandmeet.redis.RedisUtil;
@@ -114,6 +113,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         configuration.addAllowedHeader("*");
         configuration.addExposedHeader("Authorization"); // 없으면 프론트측 Header에 나타나지않고 network에만 나타나게됨
         configuration.addExposedHeader(JwtProperties.HEADER_ACCESS); // 없으면 프론트측 Header에 나타나지않고 network에만 나타나게됨
+        configuration.addExposedHeader(JwtProperties.HEADER_REFRESH);
         configuration.addExposedHeader("username");
         configuration.addExposedHeader("nickname");
         configuration.addExposedHeader("profile");
@@ -121,6 +121,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         configuration.setAllowCredentials(true);
 //        configuration.validateAllowCredentials();
         configuration.setMaxAge(3600L);
+        configuration.applyPermitDefaultValues(); // 기본 허용 설정
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
