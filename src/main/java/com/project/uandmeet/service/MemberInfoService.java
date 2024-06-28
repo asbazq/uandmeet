@@ -28,7 +28,8 @@ public class MemberInfoService {
     private final ReviewRepository reviewRepository;
     // private final S3Uploader s3Uploader;
     private final LocalUploader localUploader;
-    private final String POST_IMAGE_DIR = "static";
+    // private final String POST_IMAGE_DIR = "static";
+    private final String POST_IMAGE_DIR = "images";
 
     // 활동 내역 조회
     public MypageDto action(UserDetailsImpl userDetails) {
