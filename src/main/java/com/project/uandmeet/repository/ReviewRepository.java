@@ -1,7 +1,5 @@
 package com.project.uandmeet.repository;
 
-import com.project.uandmeet.model.Board;
-import com.project.uandmeet.model.Member;
 import com.project.uandmeet.model.Review;
 import org.springframework.data.jpa.repository.JpaRepository;
 

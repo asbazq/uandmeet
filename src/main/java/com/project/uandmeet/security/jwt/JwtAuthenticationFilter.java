@@ -1,16 +1,12 @@
 package com.project.uandmeet.security.jwt;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.project.uandmeet.dto.LoginRequestDto;
-import com.project.uandmeet.model.Member;
 import com.project.uandmeet.redis.RedisUtil;
 import com.project.uandmeet.security.UserDetailsImpl;
 import org.springframework.security.authentication.AuthenticationManager;

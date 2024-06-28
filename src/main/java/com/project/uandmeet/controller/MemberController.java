@@ -1,12 +1,8 @@
 package com.project.uandmeet.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.project.uandmeet.dto.*;
-import com.project.uandmeet.Exception.CustomException;
-import com.project.uandmeet.model.Review;
 import com.project.uandmeet.security.UserDetailsImpl;
 import com.project.uandmeet.service.EmailService;
-import com.project.uandmeet.service.KakaoService;
 import com.project.uandmeet.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,9 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.List;
-import java.util.Map;
 
 
 @Slf4j
@@ -27,7 +20,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class MemberController {
     private final MemberService memberService;
-    private final KakaoService kakaoService;
     private final EmailService emailService;
 
 
@@ -111,12 +103,6 @@ public class MemberController {
         return ResponseEntity.ok(memberService.changepass(userDetails, passwordChangeDto));
     }
 
-    // kakao login
-    @GetMapping("/user/kakao/callback")
-    public ResponseEntity<Map<String, String>> kakaoLogin(@RequestParam String code) throws JsonProcessingException, UnsupportedEncodingException {
-        // authorizedCode: 카카오 서버로부터 받은 인가 코드
-        return ResponseEntity.ok(kakaoService.kakaoLogin(code));
-    }
     @GetMapping("/api/test")
     public String test() {
         return "성공";

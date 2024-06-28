@@ -1,8 +1,5 @@
 package com.project.uandmeet.service;
 
-import com.project.uandmeet.Exception.CustomException;
-import com.project.uandmeet.Exception.ErrorCode;
-import com.project.uandmeet.model.Member;
 import com.project.uandmeet.redis.RedisUtil;
 import com.project.uandmeet.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,8 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.*;
 import javax.mail.internet.MimeMessage;
-import java.io.IOException;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service

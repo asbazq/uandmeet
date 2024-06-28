@@ -1,7 +1,6 @@
 package com.project.uandmeet.model;
 
 import lombok.*;
-import net.bytebuddy.implementation.bind.annotation.Default;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -10,7 +9,6 @@ import java.util.Map;
 
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -26,7 +24,7 @@ public class Member {
     @Column(nullable = true, unique = true)
     private String nickname;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String password;
 
     @Column
@@ -81,11 +79,11 @@ public class Member {
 
     // kakaoUser
     @Builder
-    public Member(String nickname, String encodedPassword, String email, String gender) {
+    public Member(String username, String loginto, MemberRoleEnum role, String nickname) {
+        this.username = username;
+        this.loginto = loginto;
+        this.role = role;
         this.nickname = nickname;
-        this.password = encodedPassword;
-        this.username = email;
-        this.gender = gender;
     }
 
 

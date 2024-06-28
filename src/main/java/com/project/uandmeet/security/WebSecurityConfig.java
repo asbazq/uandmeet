@@ -107,8 +107,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-//        configuration.addAllowedOriginPattern("http://localhost:3000");
-        configuration.addAllowedOriginPattern("http://3.35.9.167:8080");
+       configuration.addAllowedOriginPattern("http://localhost:3000");
+        // configuration.addAllowedOriginPattern("http://3.35.9.167:8080");
         //이곳에 관련 url 추가 해야합니다 도메인,리액트(?) 등
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");

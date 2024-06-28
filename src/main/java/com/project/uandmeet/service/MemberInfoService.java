@@ -10,7 +10,6 @@ import com.project.uandmeet.repository.EntryRepository;
 import com.project.uandmeet.repository.MemberRepository;
 import com.project.uandmeet.repository.ReviewRepository;
 import com.project.uandmeet.security.UserDetailsImpl;
-import com.project.uandmeet.service.S3.S3Uploader;
 import com.project.uandmeet.service.local.LocalUploader;
 
 import lombok.RequiredArgsConstructor;
@@ -27,7 +26,7 @@ public class MemberInfoService {
     private final MemberRepository memberRepository;
     private final EntryRepository entryRepository;
     private final ReviewRepository reviewRepository;
-    private final S3Uploader s3Uploader;
+    // private final S3Uploader s3Uploader;
     private final LocalUploader localUploader;
     private final String POST_IMAGE_DIR = "static";
 

@@ -11,17 +11,20 @@ import com.project.uandmeet.dto.MemberDtoGroup.MemberSimpleDto;
 import com.project.uandmeet.model.*;
 import com.project.uandmeet.repository.*;
 import com.project.uandmeet.security.UserDetailsImpl;
-import com.project.uandmeet.service.S3.S3Uploader;
 import com.project.uandmeet.service.local.LocalUploader;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.*;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor //생성자 미리 생성.
 public class BoardService {
@@ -32,9 +35,9 @@ public class BoardService {
     private final LikedRepository likedRepository;
     private final EntryRepository entryRepository;
     private final CommentRepository commentRepository;
-    private final S3Uploader s3Uploader;
+    // private final S3Uploader s3Uploader;
     private final LocalUploader localUploader;
-    private final String POST_IMAGE_DIR = "static";
+    private final String POST_IMAGE_DIR = "images";
 
     private final SiareaRepository siareaRepository;
     private final GuareaRepository guareaRepository;
@@ -42,7 +45,7 @@ public class BoardService {
 
     //게시판 생성
     @Transactional
-    public Long boardNew(BoardRequestDto.createAndCheck boardRequestDto, UserDetailsImpl userDetails) throws IOException, CustomException {
+    public Long boardNew(BoardRequestDto.createAndCheck boardRequestDto, UserDetailsImpl userDetails, MultipartFile data) throws IOException, CustomException {
         Member member = memberRepository.findByUsername(userDetails.getUsername())
                 .orElseThrow(() -> new CustomException(ErrorCode.EMPTY_CONTENT));
 
@@ -61,20 +64,16 @@ public class BoardService {
         }
 
         Board board;
-        if (boardRequestDto.getData() != null) {
+        if (data != null && !data.isEmpty()) {
             // ImageDto uploadImage = s3Uploader.upload(boardRequestDto.getData(), POST_IMAGE_DIR);
-            ImageDto uploadImage = localUploader.upload(boardRequestDto.getData(), POST_IMAGE_DIR); 
+            ImageDto uploadImage = localUploader.upload(data, POST_IMAGE_DIR); 
             board = new Board(member, category, siarea, guarea, boardRequestDto, uploadImage.getImageUrl());
         } else {
             board = new Board(member, category, siarea, guarea, boardRequestDto);
         }
 
-        try {
-            boardRepository.save(board);
-            return board.getId();
-        } catch (Exception e) {
-            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
-        }
+        boardRepository.save(board);
+        return board.getId();
     }
 
     //매칭 게시물 전체 조회 (카테고리별 전체 조회)
@@ -159,7 +158,7 @@ public class BoardService {
 
     //게시물 삭제.
     @Transactional
-    public CustomException boardDel(Long id, UserDetailsImpl userDetails) {
+    public CustomException  boardDel(Long id, UserDetailsImpl userDetails) {
         Member member = memberRepository.findById(userDetails.getMember().getId())
                 .orElseThrow(() -> new CustomException(ErrorCode.EMPTY_CONTENT));
 
