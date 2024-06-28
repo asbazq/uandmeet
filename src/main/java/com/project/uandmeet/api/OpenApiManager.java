@@ -26,7 +26,7 @@ public class OpenApiManager {
     private final SiareaRepository siareaRepostiory;
     private final GuareaRepository guareaRepostiory;
     private final String BASE_URL = "http://api.vworld.kr/req/data";
-    private final String serviceKey = "?key=908D840D-CAAF-3C01-9A6D-307EE8D34A6E";
+    private final String serviceKey = "?key=ED861301-B9B2-3E40-8239-097C7528F4F1";
     private final String defaultDomain = "&domain=http://localhost:8080/";
     private final String serviceName = "&service=data";
     private final String version = "&version=2.0";
