@@ -43,13 +43,6 @@ public class MemberController {
         return ResponseEntity.ok(memberService.signup(requestDto));
     }
 
-    // 회원가입 test
-    @PostMapping("/api/join")
-    public void join(@RequestBody MemberRequestDto requestDto) {
-        memberService.join(requestDto);
-
-    }
-
     // logout
     @GetMapping("/api/logout")
     public void logout (@AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -63,14 +56,14 @@ public class MemberController {
         return memberService.withdraw(userDetails, requestDto.getPassword());
     }
 
-    // 1. 클라이언트에서 로그인한다.
-    // 2. 서버는 클라이언트에게 Access Token 과 Refresh Token 을 발급한다. 동시에 Refresh Token 은 redeis 에 저장된다.
-    // 3. 클라이언트는 local 저장소에 Token 을 저장한다.
-    // 4. 매 요청마다 Access Token 을 헤더에 담아서 요청한다.
-    // 5 .이 때, Access Token 이 만료가 되면 서버는 만료되었다는 Response 를 하게 된다.
-    // 6. 클라이언트는 해당 Response 를 받으면 Refresh Token 을 보낸다.
-    // 7. 서버는 Refresh Token 유효성 체크를 하게 되고, 새로운 Access Token 을 발급한다.
-    // 8. 클라이언트는 새롭게 받은 Access Token 을 기존의 Access Token 에 덮어쓰게 된다.
+    /*  1. 클라이언트에서 로그인한다.
+        2. 서버는 클라이언트에게 Access Token 과 Refresh Token 을 발급한다. 동시에 Refresh Token 은 redeis 에 저장된다.
+        3. 클라이언트는 local 저장소에 Token 을 저장한다.
+        4. 매 요청마다 Access Token 을 헤더에 담아서 요청한다.
+        5 .이 때, Access Token 이 만료가 되면 서버는 만료되었다는 Response 를 하게 된다
+        6. 클라이언트는 해당 Response 를 받으면 Refresh Token 을 보낸다.
+        7. 서버는 Refresh Token 유효성 체크를 하게 되고, 새로운 Access Token 을 발급한다.
+        8. 클라이언트는 새롭게 받은 Access Token 을 기존의 Access Token 에 덮어쓰게 된다. */
     @GetMapping("/api/refresh")
     public ResponseEntity<String> refresh(HttpServletRequest request,
                                                        HttpServletResponse response) throws IOException {
@@ -101,10 +94,5 @@ public class MemberController {
     public ResponseEntity<String> changepass(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                              @RequestBody PasswordChangeDto passwordChangeDto) {
         return ResponseEntity.ok(memberService.changepass(userDetails, passwordChangeDto));
-    }
-
-    @GetMapping("/api/test")
-    public String test() {
-        return "성공";
     }
 }
