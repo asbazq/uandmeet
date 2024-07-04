@@ -20,18 +20,11 @@ public class Review extends BaseTime{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "board")
-//    private Board board;
     @Column(name = "board")
     private Long boardId;
 
     @Column(name = "form_member")
     private Long from;
-
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "to_member")
-//    private Member to;
 
     @Column(name = "to_member")
     private Long to;
