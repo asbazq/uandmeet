@@ -9,6 +9,7 @@ import com.project.uandmeet.Exception.CustomException;
 import com.project.uandmeet.Exception.ErrorCode;
 import com.project.uandmeet.dto.MemberDtoGroup.MemberSimpleDto;
 import com.project.uandmeet.model.*;
+import com.project.uandmeet.redis.RedisUtil;
 import com.project.uandmeet.repository.*;
 import com.project.uandmeet.security.UserDetailsImpl;
 import com.project.uandmeet.service.local.LocalUploader;
@@ -16,7 +17,9 @@ import com.project.uandmeet.service.local.LocalUploader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.json.simple.parser.ParseException;
 import org.springframework.data.domain.*;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,14 +41,12 @@ public class BoardService {
     // private final S3Uploader s3Uploader;
     private final LocalUploader localUploader;
     private final String POST_IMAGE_DIR = "images";
-
-    private final SiareaRepository siareaRepository;
-    private final GuareaRepository guareaRepository;
+    private final RedisUtil redisUtil;
 
 
     //게시판 생성
     @Transactional
-    public Long boardNew(BoardRequestDto.createAndCheck boardRequestDto, UserDetailsImpl userDetails, MultipartFile data) throws IOException, CustomException {
+    public Long boardNew(BoardRequestDto.createAndCheck boardRequestDto, UserDetailsImpl userDetails, MultipartFile data) throws IOException, CustomException, NullPointerException, ParseException {
         Member member = memberRepository.findByUsername(userDetails.getUsername())
                 .orElseThrow(() -> new CustomException(ErrorCode.EMPTY_CONTENT));
 
@@ -56,11 +57,13 @@ public class BoardService {
         Guarea guarea = null;
 
         if (boardRequestDto.getBoardType().equals("matching")) {
-            siarea = siareaRepository.findByCtpKorNmAbbreviation(boardRequestDto.getCity())
-                    .orElseThrow(() -> new CustomException(ErrorCode.EMPTY_CONTENT));
+            siarea = redisUtil.getSiarea(boardRequestDto.getCity());
+            guarea = redisUtil.getGuarea(boardRequestDto.getCity(), boardRequestDto.getGu());
+            // siarea = siareaRepository.findByCtpKorNmAbbreviation(boardRequestDto.getCity())
+            //         .orElseThrow(() -> new CustomException(ErrorCode.EMPTY_CONTENT));
 
-            guarea = guareaRepository.findAllBySiareaAndSigKorNm(siarea, boardRequestDto.getGu())
-                    .orElseThrow(() -> new CustomException(ErrorCode.EMPTY_CONTENT));
+            // guarea = guareaRepository.findAllBySiareaAndSigKorNm(siarea, boardRequestDto.getGu())
+            //         .orElseThrow(() -> new CustomException(ErrorCode.EMPTY_CONTENT));
         }
 
         Board board;
@@ -73,12 +76,13 @@ public class BoardService {
         }
 
         boardRepository.save(board);
+        log.info("board Id : {}", board.getId());
         return board.getId();
     }
 
     //매칭 게시물 전체 조회 (카테고리별 전체 조회)
     @Transactional
-    public BoardResponseFinalDto boardMatchingAllInquiry(String type, String cate, Integer page, Integer amount, String city, String gu) {
+    public BoardResponseFinalDto boardMatchingAllInquiry(String type, String cate, Integer page, Integer amount, String city, String gu) throws NullPointerException, ParseException {
         page = Math.max(page - 1, 0);
 
         Sort sort = Sort.by("createdAt").descending();
@@ -94,13 +98,15 @@ public class BoardService {
         }
 
         if (!city.equalsIgnoreCase("all")) {
-            siarea = siareaRepository.findByCtpKorNmAbbreviation(city)
-                    .orElseThrow(() -> new CustomException(ErrorCode.EMPTY_CONTENT));
+            siarea = redisUtil.getSiarea(city);
+            // siarea = siareaRepository.findByCtpKorNmAbbreviation(city)
+            //         .orElseThrow(() -> new CustomException(ErrorCode.EMPTY_CONTENT));
         }
 
         if (!gu.equalsIgnoreCase("all")) {
-            guarea = guareaRepository.findAllBySiareaAndSigKorNm(siarea, gu)
-                    .orElseThrow(() -> new CustomException(ErrorCode.EMPTY_CONTENT));
+            guarea = redisUtil.getGuarea(city, gu);
+            // guarea = guareaRepository.findAllBySiareaAndSigKorNm(siarea, gu)
+            //         .orElseThrow(() -> new CustomException(ErrorCode.EMPTY_CONTENT));
         }
 
         if (cate.equalsIgnoreCase("all")) {

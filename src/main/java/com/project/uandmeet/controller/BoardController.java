@@ -11,6 +11,8 @@ import com.project.uandmeet.security.UserDetailsImpl;
 import com.project.uandmeet.service.BoardService;
 import com.project.uandmeet.service.SearchService;
 import lombok.RequiredArgsConstructor;
+
+import org.json.simple.parser.ParseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -35,7 +37,7 @@ public class BoardController {
     @PostMapping("/api/board/create")
     private ResponseEntity<Long> boardNew(@ModelAttribute BoardRequestDto.createAndCheck boardRequestDto,
                                           @AuthenticationPrincipal UserDetailsImpl userDetails,
-                                           @RequestParam(value = "data", required = false) MultipartFile data) throws IOException {
+                                           @RequestParam(value = "data", required = false) MultipartFile data) throws IOException, CustomException, NullPointerException, ParseException {
         System.out.println(userDetails.getMember().getUsername());
         return ResponseEntity.ok(boardService.boardNew(boardRequestDto, userDetails, data));
     }
@@ -47,7 +49,7 @@ public class BoardController {
             @RequestParam Integer page,        //페이지번호
             @RequestParam Integer amount,
             @RequestParam String city,        //시
-            @RequestParam String gu) {        //군
+            @RequestParam String gu) throws NullPointerException, ParseException {        //군
         BoardResponseFinalDto boardMatchingAllInquiry = boardService.boardMatchingAllInquiry("matching",cate,page,amount,city,gu);
 
         if (boardMatchingAllInquiry == null) {
