@@ -18,9 +18,9 @@ import java.util.List;
 public class MemberInfoController {
     private final MemberInfoService memberInfoService;
     // 활동페이지 조회
-    @GetMapping("/api/mypage/action")
-    public ResponseEntity<MypageDto> action(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return ResponseEntity.ok(memberInfoService.action(userDetails));
+    @GetMapping("/api/mypage/action/{nickname}")
+    public ResponseEntity<MypageDto> action(@PathVariable("nickname") String nickname) {
+        return ResponseEntity.ok(memberInfoService.action(nickname));
     }
 
     // 활동페이지 -> nickname 수정
@@ -59,9 +59,9 @@ public class MemberInfoController {
     }
 
     // profile 조회
-    @GetMapping("/api/mypage/profile")
-    public ResponseEntity<ProfileDto> profile(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return ResponseEntity.ok(memberInfoService.profile(userDetails));
+    @GetMapping("/api/mypage/profile/{nickname}")
+    public ResponseEntity<ProfileDto> profile(@PathVariable("nickname") String nickname) {
+        return ResponseEntity.ok(memberInfoService.profile(nickname));
     }
 
     // profile 수정
@@ -72,14 +72,16 @@ public class MemberInfoController {
     }
 
     // 매칭 간단평가
-    @GetMapping("/api/userinfo/simplereview")
-    public ResponseEntity<SimpleReviewResponseDto> simpleReview(@RequestBody MemberIdRequestDto requestDto) {
-        return ResponseEntity.ok(memberInfoService.simpleReview(requestDto.getMemberId()));
+    @GetMapping("/api/userinfo/simplereview/{nickname}")
+    public ResponseEntity<SimpleReviewResponseDto> simpleReview(@PathVariable("nickname") String nickname) {
+        return ResponseEntity.ok(memberInfoService.simpleReview(nickname));
     }
 
     // 매칭 후기
-    @GetMapping("/api/userinfo/review")
-    public ResponseEntity<List<Review>> Review(@RequestBody MemberIdRequestDto requestDto) {
-        return ResponseEntity.ok(memberInfoService.Review(requestDto.getMemberId()));
+    @GetMapping("/api/userinfo/review/{nickname}")
+    public ResponseEntity<List<String>> Review(@PathVariable("nickname") String nickname,
+                                                @RequestParam int page,
+                                                @RequestParam int amount) {
+        return ResponseEntity.ok(memberInfoService.Review(nickname, page, amount));
     }
 }

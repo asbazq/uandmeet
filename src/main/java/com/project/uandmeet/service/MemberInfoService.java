@@ -13,6 +13,12 @@ import com.project.uandmeet.security.UserDetailsImpl;
 import com.project.uandmeet.service.local.LocalUploader;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +26,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class MemberInfoService {
@@ -32,13 +39,11 @@ public class MemberInfoService {
     private final String POST_IMAGE_DIR = "images";
 
     // 활동 내역 조회
-    public MypageDto action(UserDetailsImpl userDetails) {
-        Long userId = userDetails.getMember().getId();
-        Member member = memberRepository.findById(userId).orElseThrow(
+    public MypageDto action(String nickname) {
+        Member member = memberRepository.findByNickname(nickname).orElseThrow(
                 () -> new CustomException(ErrorCode.MEMBER_NOT_FOUND)
         );
         List<Entry> entry = entryRepository.findByMember(member); // 참여한 매칭 리스트
-        String nickname = member.getNickname();
         List<String> concern = member.getConcern();
         Long cnt = entryRepository.countByMember(member); // 참여한 매칭
         Map<String, Long> joinCnt = new HashMap<>();
@@ -169,14 +174,14 @@ public class MemberInfoService {
     }
 
     // profile 조회
-    public ProfileDto profile (UserDetailsImpl userDetails){
-        Long userId = userDetails.getMember().getId();
-        Member member = memberRepository.findById(userId).orElseThrow(
+    public ProfileDto profile (String nickname){
+        log.info("nickname : " + nickname);
+        Member member = memberRepository.findByNickname(nickname).orElseThrow(
                 () -> new CustomException(ErrorCode.MEMBER_NOT_FOUND)
         );
+        Long userId = member.getId();
         List<Review> review = reviewRepository.findByTo(userId);
 
-        String nickname = member.getNickname();
         Double sum = 0D;
         Double star;
         for (Review value : review) {
@@ -225,9 +230,9 @@ public class MemberInfoService {
         }
     }
 
-    public SimpleReviewResponseDto simpleReview (Long memberId){
+    public SimpleReviewResponseDto simpleReview (String nickname){
         // 해당 유저가 없을 시 에러코드르 띄우기 위해 사용
-        Member member = memberRepository.findById(memberId).orElseThrow(
+        Member member = memberRepository.findByNickname(nickname).orElseThrow(
                 ()-> new CustomException(ErrorCode.MEMBER_NOT_FOUND)
         );
         Long reviewCnt = reviewRepository.countByTo(member.getId());
@@ -259,8 +264,22 @@ public class MemberInfoService {
         return new SimpleReviewResponseDto(sortedReview);
     }
 
-    public List<Review> Review (Long memberId){
-        return reviewRepository.findAllById(memberId);
+    public List<String> Review (String nickname, int page, int amount) {
+        Member member = memberRepository.findByNickname(nickname).orElseThrow(
+            ()-> new CustomException(ErrorCode.MEMBER_NOT_FOUND)
+        );
+         // page 함수
+        Sort.Direction direction = Sort.Direction.DESC;
+        String sortby = "createdAt";
+        Sort sort = Sort.by(direction, sortby);
+        Pageable pageable = PageRequest.of(page, amount, sort);
+        Page<Review> reviews = reviewRepository.findAllById(member.getId(), pageable);
+        List<String> reviewList = new ArrayList<>();
+
+        for (Review review : reviews) {
+            reviewList.add(review.getMessage());
+        }
+        return reviewList;
     }
 
 
