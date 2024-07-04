@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -19,7 +21,7 @@ public class SearchService {
 
     private final BoardRepository boardRepository;
 
-    public List<SearchResponseDto> queryDslSearch(String boardType,int page, int size, String sort, String keyword, String city, String gu) {
+    public List<SearchResponseDto>  queryDslSearch(String boardType,int page, int size, String sort, String keyword, String city, String gu) {
 
         page = Math.max(page - 1, 0);
 
@@ -30,27 +32,24 @@ public class SearchService {
 
             Page<Board> result = boardRepository.searchByBoardTypeAndTitleContaining(boardType, keyword, pageable);
 
-            List<SearchResponseDto> boardList = new ArrayList<>();
-
-            result.stream().forEach(board -> {
+             // map을 사용하면 각 요소를 처리하고 그 결과를 새로운 리스트로 변환
+             List<SearchResponseDto> boardList = result.stream().map(board -> {
 
                 // 정보 공유일때
                 if(board.getBoardType().equals("information")){
-
                     Long id = board.getId();
-                    String bt = "information";
                     Board board1 = boardRepository.findById(id).orElseThrow(() -> new NullPointerException("보드가 없습니다"));
-                    SearchResponseDto responseDto = new SearchResponseDto(board1,bt);
-                    boardList.add(responseDto);
+                    return new SearchResponseDto(board1, "information");
                 }
                 // 매칭 게시판일때
                 else{
-
-                    matching_Service(city,gu,boardList,board);
-
+                    List<SearchResponseDto> tempBoardList = new ArrayList<>();
+                    matching_Service(city, gu, tempBoardList, board);
+                    return tempBoardList.isEmpty() ? null : tempBoardList.get(0);
                 }
-
-            });
+            })
+            .filter(Objects::nonNull)
+            .collect(Collectors.toList());
             return boardList;
         }
 
@@ -61,29 +60,24 @@ public class SearchService {
 
             Page<Board> result = boardRepository.searchByBoardTypeAndContentContaining(boardType, keyword, pageable);
 
-            List<SearchResponseDto> boardList = new ArrayList<>();
-
-            result.stream().forEach(board -> {
+            // map을 사용하면 각 요소를 처리하고 그 결과를 새로운 리스트로 변환
+            List<SearchResponseDto> boardList = result.stream().map(board -> {
 
                 // 정보 공유일때
                 if(board.getBoardType().equals("information")){
                     Long id = board.getId();
-                    String bt = "information";
                     Board board1 = boardRepository.findById(id).orElseThrow(() -> new NullPointerException("보드가 없습니다"));
-
-                    SearchResponseDto responseDto = new SearchResponseDto(board1,bt);
-
-                    boardList.add(responseDto);
+                    return new SearchResponseDto(board1, "information");
                 }
-
                 // 매칭 게시판일때
                 else{
-
-                    matching_Service(city,gu,boardList,board);
-
+                    List<SearchResponseDto> tempBoardList = new ArrayList<>();
+                    matching_Service(city, gu, tempBoardList, board);
+                    return tempBoardList.isEmpty() ? null : tempBoardList.get(0);
                 }
-
-            });
+            })
+            .filter(Objects::nonNull)
+            .collect(Collectors.toList());
             return boardList;
         }
 
@@ -94,30 +88,24 @@ public class SearchService {
 
             Page<Board> result = boardRepository.searchByBoardTypeAndTitleContainingOrContentContaining(boardType, keyword, pageable);
 
-            List<SearchResponseDto> boardList = new ArrayList<>();
-
-            result.stream().forEach(board -> {
+            // map을 사용하면 각 요소를 처리하고 그 결과를 새로운 리스트로 변환
+            List<SearchResponseDto> boardList = result.stream().map(board -> {
 
                 // 정보 공유일때
                 if(board.getBoardType().equals("information")){
-
                     Long id = board.getId();
-                    String bt = "information";
                     Board board1 = boardRepository.findById(id).orElseThrow(() -> new NullPointerException("보드가 없습니다"));
-
-                    SearchResponseDto responseDto = new SearchResponseDto(board1,bt);
-
-                    boardList.add(responseDto);
+                    return new SearchResponseDto(board1, "information");
                 }
-
                 // 매칭 게시판일때
                 else{
-
-                    matching_Service(city,gu,boardList,board);
-
+                    List<SearchResponseDto> tempBoardList = new ArrayList<>();
+                    matching_Service(city, gu, tempBoardList, board);
+                    return tempBoardList.isEmpty() ? null : tempBoardList.get(0);
                 }
-            });
-
+            })
+            .filter(Objects::nonNull)
+            .collect(Collectors.toList());
             return boardList;
         }
 
