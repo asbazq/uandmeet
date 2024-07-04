@@ -34,7 +34,8 @@ public  interface BoardRepository extends JpaRepository<Board, Long> {
     @Query("SELECT p FROM Board p WHERE p.boardType = :boardType AND p.content LIKE CONCAT('%', :query, '%')")
     Page<Board> searchByBoardTypeAndContentContaining(@Param("boardType") String boardType, @Param("query") String query, Pageable pageable);
 
-    @Query("SELECT p FROM Board p WHERE p.boardType = :boardType AND p.title LIKE CONCAT('%', :query, '%') OR p.content LIKE CONCAT('%', :query, '%')")
+    // @Query("SELECT p FROM Board p WHERE p.boardType = :boardType AND (p.title LIKE CONCAT('%', :query, '%') OR p.content LIKE CONCAT('%', :query, '%'))")
+    @Query("SELECT p FROM Board p WHERE p.boardType = :boardType AND (p.title LIKE '%' || :query || '%' OR p.content LIKE '%' || :query || '%')")
     Page<Board> searchByBoardTypeAndTitleContainingOrContentContaining(@Param("boardType") String boardType, @Param("query") String query, Pageable pageable);
     
 }
