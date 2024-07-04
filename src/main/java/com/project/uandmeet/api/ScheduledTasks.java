@@ -33,7 +33,6 @@ public class ScheduledTasks {
     public void fetchApiData() {
         try {
             openApiManager.fetch();
-            openApiManager.dataRequest();
         } catch (ParseException | NullPointerException e) {
             e.printStackTrace();
         }

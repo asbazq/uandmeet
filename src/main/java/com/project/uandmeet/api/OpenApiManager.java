@@ -12,7 +12,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -23,10 +23,12 @@ import java.util.List;
 //Component : 개발자가직접 작성한 class를 bean으로 등록하기 위한 annotation.
 public class OpenApiManager {
 
+    @Value("${openApi.secretKey}")
+    private String serviceKey;
+
     private final SiareaRepository siareaRepostiory;
     private final GuareaRepository guareaRepostiory;
     private final String BASE_URL = "http://api.vworld.kr/req/data";
-    private final String serviceKey = "?key=ED861301-B9B2-3E40-8239-097C7528F4F1";
     private final String defaultDomain = "&domain=http://localhost:8080/";
     private final String serviceName = "&service=data";
     private final String version = "&version=2.0";

@@ -32,10 +32,10 @@ public class ApiController {
     //     return openApiManager.fetch();
     // }
 
-    // @GetMapping("/allow_info/dataRequest")
-    // public List<OpenApiResponseParams> dataRequest() {
-    //     return openApiManager.dataRequest();
-    // }
+    @GetMapping("/allow_info/dataRequest")
+    public List<OpenApiResponseParams> dataRequest() {
+        return openApiManager.dataRequest();
+    }
 
     // image 조회
     @GetMapping("/images/{filename}")
