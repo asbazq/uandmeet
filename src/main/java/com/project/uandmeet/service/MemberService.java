@@ -202,7 +202,6 @@ public class MemberService {
     }
 
 
-    @Transactional
     public String refresh(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         //AccessToken
@@ -249,6 +248,7 @@ public class MemberService {
 
     @Transactional
     public String findpassword(String username) {
+        log.info("find password");
         Member member = memberRepository.findByUsername(username).orElseThrow(
                 () -> new CustomException(ErrorCode.MEMBER_NOT_FOUND)
         );

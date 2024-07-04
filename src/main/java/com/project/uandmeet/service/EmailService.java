@@ -75,6 +75,7 @@ public class EmailService {
     }
 
     //이메일 전송 메소드
+    @Transactional
     public void mailSend(String setFrom, String toMail, String title, String content) {
         MimeMessage message = mailSender.createMimeMessage();
         // true 매개값을 전달하면 multipart 형식의 메세지 전달이 가능.문자 인코딩 설정도 가능하다.

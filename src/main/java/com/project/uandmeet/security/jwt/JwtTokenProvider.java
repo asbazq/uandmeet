@@ -8,13 +8,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.uandmeet.Exception.CustomException;
 import com.project.uandmeet.Exception.ErrorCode;
-import com.project.uandmeet.security.UserDetailsImpl;
 import io.jsonwebtoken.*;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,10 +20,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import javax.crypto.SecretKey;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
@@ -125,7 +121,7 @@ public class JwtTokenProvider {
         DecodedJWT jwt = null;
 
         try {
-            Algorithm algorithm = Algorithm.HMAC512(String.valueOf(secretKey));
+            Algorithm algorithm = Algorithm.HMAC512(secretKey.getBytes());
             JWTVerifier verifier = JWT
                     .require(algorithm)
                     .build();
